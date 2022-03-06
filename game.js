@@ -1,5 +1,7 @@
 const question = document.getElementById("question")
 const choices = Array.from(document.getElementsByClassName("choice-text"))
+const questionCounterText = document.getElementById("questionCounter")
+const scoreText = document.getElementById("score")
 
 let currentQuestion = {};
 let acceptingAnswers = false;
@@ -50,6 +52,7 @@ getNewQuestion = () => {
     if (avaliableQuestion.length == 0 || questionCounter >= MAX_QUESTIONS)
         return window.location.assign('/end.html');
     questionCounter++;
+    questionCounterText.innerText = `${questionCounter}/${MAX_QUESTIONS}`;
     const questionIndex = Math.floor(Math.random() * avaliableQuestion.length);
     currentQuestion = avaliableQuestion[questionIndex];
     question.innerText = currentQuestion.question;
@@ -63,26 +66,29 @@ getNewQuestion = () => {
 };
 
 choices.forEach( choice => {
-    console.log("jenny")
     choice.addEventListener("click", e => { 
         if (!acceptingAnswers) return;
 
         acceptingAnswers = false;
         const selectedChoice = e.target;
-        console.log(selectedChoice)
         const selectedAnswer = selectedChoice.dataset['number'];
-        console.log(selectedAnswer)
-        console.log(currentQuestion.answer)
         const classToApply = 
             selectedAnswer == currentQuestion.answer ? 'correct' : 'incorrect'
-        console.log(classToApply)
         selectedChoice.parentElement.classList.add(classToApply)
+        if (classToApply == 'correct') {
+            incrementScore(CORRECT_BONUS)
+        }
+
         setTimeout(() => {
             selectedChoice.parentElement.classList.remove(classToApply)
             getNewQuestion();
         }, 1000)
+
 });
 })
 
-
+incrementScore = num => {
+    score += num;
+    scoreText.innerText = score;
+}
 startGame();
