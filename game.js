@@ -69,9 +69,20 @@ choices.forEach( choice => {
 
         acceptingAnswers = false;
         const selectedChoice = e.target;
+        console.log(selectedChoice)
         const selectedAnswer = selectedChoice.dataset['number'];
-        getNewQuestion();
+        console.log(selectedAnswer)
+        console.log(currentQuestion.answer)
+        const classToApply = 
+            selectedAnswer == currentQuestion.answer ? 'correct' : 'incorrect'
+        console.log(classToApply)
+        selectedChoice.parentElement.classList.add(classToApply)
+        setTimeout(() => {
+            selectedChoice.parentElement.classList.remove(classToApply)
+            getNewQuestion();
+        }, 1000)
 });
 })
+
 
 startGame();
